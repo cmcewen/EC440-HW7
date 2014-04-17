@@ -123,7 +123,6 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 	memset(msg, 0, BUF_LEN);
 
 	sum = 0;
-	int i;
 	for (i=0; i<10; i++) {
 		sum += nums[i];
 	}
