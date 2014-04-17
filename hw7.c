@@ -120,8 +120,10 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 	int bytes_read = 0;
 	memset(msg, 0, BUF_LEN);
 
-	long int sum = 0;
-	for (int i=0; i<10; i++) {
+	long int sum
+	sum = 0;
+	int i;
+	for (i=0; i<10; i++) {
 		sum += nums[i];
 	}
 	sprintf(msg, "Sum of last 10 valid numbers entered = %li\n", sum);
@@ -170,11 +172,13 @@ device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 		get_user(Wmsg[i], buff+i);
 	}
 
-	int bytes_written = i;
+	int bytes_written
+	bytes_written = i;
 	long int num;
 	num = 0;
-	kstrtol (Wmsg, 10, &num);
-	if (num == 0) {
+	int ret;
+	ret = kstrtol (Wmsg, 10, &num);
+	if (ret != 0) {
 		printk(KERN_ALERT "Didn't recognize the number you entered\n");
 	}
 	else {
