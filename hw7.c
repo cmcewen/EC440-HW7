@@ -28,6 +28,8 @@ static char Wmsg[BUF_LEN];	/* The msg the device will give when asked */
 
 long int nums[10] = {0};
 int arrayCount = 0;
+long int sum, num;
+int i, bytes_written, ret;
 
 static struct file_operations fops = {
 	.read = device_read,
@@ -120,7 +122,6 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 	int bytes_read = 0;
 	memset(msg, 0, BUF_LEN);
 
-	long int sum
 	sum = 0;
 	int i;
 	for (i=0; i<10; i++) {
@@ -165,18 +166,14 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 static ssize_t
 device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 {
-	int i;
 	memset(Wmsg, 0, BUF_LEN);
 
 	for (i=0; i<len && i< BUF_LEN; i++) {
 		get_user(Wmsg[i], buff+i);
 	}
 
-	int bytes_written
 	bytes_written = i;
-	long int num;
 	num = 0;
-	int ret;
 	ret = kstrtol (Wmsg, 10, &num);
 	if (ret != 0) {
 		printk(KERN_ALERT "Didn't recognize the number you entered\n");
