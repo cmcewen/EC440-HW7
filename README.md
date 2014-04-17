@@ -9,5 +9,6 @@ mknod /dev/chardev c 248 0
 cat /dev/chardev
 echo 10 > /dev/chardev
 cat /dev/chardev
+rmmod ./hw7.ko
 ```
 
