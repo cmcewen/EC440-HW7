@@ -1,6 +1,7 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/fs.h>
+#include <linux/string.h>
 #include <asm/uaccess.h>
 
 int init_module(void);
@@ -61,9 +62,7 @@ void cleanup_module(void)
 	/* 
 	 * Unregister the device 
 	 */
-	int ret = unregister_chrdev(Major, DEVICE_NAME);
-	if (ret < 0)
-		printk(KERN_ALERT "Error in unregister_chrdev: %d\n", ret);
+	unregister_chrdev(Major, DEVICE_NAME);
 }
 
 /*
@@ -82,7 +81,8 @@ static int device_open(struct inode *inode, struct file *file)
 		return -EBUSY;
 
 	Device_Open++;
-	sprintf(msg, "Hello world!\n", counter++);
+	counter++;
+	sprintf(msg, "Hello world!\n");
 	msg_Ptr = msg;
 	try_module_get(THIS_MODULE);
 
@@ -118,7 +118,7 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 	 * Number of bytes actually written to the buffer 
 	 */
 	int bytes_read = 0;
-	bzero(msg, BUF_LEN);
+	memset(msg, 0, BUF_LEN);
 
 	long int sum = 0;
 	for (int i=0; i<10; i++) {
@@ -164,14 +164,15 @@ static ssize_t
 device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 {
 	int i;
-	bzero(Wmsg, BUF_LEN);
+	memset(Wmsg, 0, BUF_LEN);
 
 	for (i=0; i<len && i< BUF_LEN; i++) {
 		get_user(Wmsg[i], buff+i);
 	}
 
 	int bytes_written = i;
-	long int num 
+	long int num;
+	num = 0;
 	kstrtol (Wmsg, 10, &num);
 	if (num == 0) {
 		printk(KERN_ALERT "Didn't recognize the number you entered\n");
