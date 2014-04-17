@@ -127,7 +127,6 @@ static ssize_t device_read(struct file *filp,	/* see include/linux/fs.h   */
 		sum += nums[i];
 	}
 	sprintf(msg, "Sum of last 10 valid numbers entered = %li\n", sum);
-	msg_Ptr = msg;
 
 	/*
 	 * If we're at the end of the message, 
