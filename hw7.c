@@ -1,8 +1,18 @@
+/*
+ * This device driver will store numbers written to the "device",
+ * then writing it back on the next read. It resets numbers when
+ * unmounted
+ */
+
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/fs.h>
 #include <linux/string.h>
 #include <asm/uaccess.h>
+
+/* 
+ * non-static Global variables
+ */
 
 int init_module(void);
 void cleanup_module(void);
@@ -38,6 +48,9 @@ static struct file_operations fops = {
 	.release = device_release
 };
 
+/*
+ * for initializing the device
+ */
 int init_module(void) {
   Major = register_chrdev(0, DEVICE_NAME, &fops);
 
@@ -66,6 +79,7 @@ void cleanup_module(void)
 	 */
 	unregister_chrdev(Major, DEVICE_NAME);
 }
+
 
 /*
  * Methods
