@@ -2,8 +2,6 @@
 #include <linux/module.h>
 #include <linux/fs.h>
 #include <asm/uaccess.h>
-#include <stdlib.h>
-#include <limits.h>
 
 int init_module(void);
 void cleanup_module(void);
@@ -173,9 +171,9 @@ device_write(struct file *filp, const char *buff, size_t len, loff_t * off)
 	}
 
 	int bytes_written = i;
-
-	long int num = strtol (Wmsg, NULL, 10);
-	if (num == 0 || num == LONG_MAX || num == LONG_MIN) {
+	long int num 
+	kstrtol (Wmsg, 10, &num);
+	if (num == 0) {
 		printk(KERN_ALERT "Didn't recognize the number you entered\n");
 	}
 	else {
