@@ -10,5 +10,6 @@ cat /dev/chardev
 echo 10 > /dev/chardev
 cat /dev/chardev
 rmmod ./hw7.ko
+rm /dev/chardev
 ```
 
